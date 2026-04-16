@@ -1,0 +1,18 @@
+{
+  "name": "ai-hardware-toolkit-mcp",
+  "version": "1.0.0",
+  "description": "MCP server exposing AI hardware manufacturing toolkit as tools — BOM costing, DFM review, NRE estimation, certification planning, supplier evaluation, and validation checklists.",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@types/node": "^22.15.2"
+  }
+}

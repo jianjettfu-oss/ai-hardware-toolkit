@@ -1,0 +1,10 @@
+{
+  "name": "AI Hardware Manufacturing Advisor",
+  "description": "Get real cost estimates, DFM reviews, and manufacturing guidance for your AI hardware product. Built from actual Shenzhen production data.",
+  "conversation_starters": [
+    "How much would it cost to manufacture a $99 AI wearable?",
+    "What certifications do I need to sell in the US and EU?",
+    "Review my design for manufacturing issues",
+    "Estimate the NRE for my first production run"
+  ]
+}
