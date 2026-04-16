@@ -1,0 +1,35 @@
+Category,Component,Description,Low (USD),Mid (USD),High (USD),Notes
+Processor / SoC,ESP32-S3,"Basic AI (voice, gesture). WiFi + BLE built-in.",2.10,2.50,3.20,Good for voice recorders and simple sensor devices
+Processor / SoC,Rockchip RV1103,"Camera + AI, 0.5 TOPS NPU. Plaud NotePin tier.",3.50,5.00,7.00,Entry-level vision AI
+Processor / SoC,Rockchip RK3562,"Mid-range AI, 1 TOPS NPU, Mali G52 GPU.",7.89,10.00,13.00,Handles most on-device inference workloads
+Processor / SoC,Rockchip RK3588S,"High-end, 6 TOPS NPU, octa-core. For edge servers.",25.00,35.00,50.00,Overkill for wearables -- use for edge AI boxes
+Processor / SoC,MediaTek Genio 510/700,"4-10 TOPS NPU, industrial grade.",18.00,28.00,40.00,Long-term availability commitment from MTK
+Memory,512MB + 4GB eMMC,"Basic: voice recorder, simple sensor device.",2.70,4.00,5.50,Pairs with RV1103
+Memory,1GB + 8GB eMMC,"Standard: camera device, on-device AI inference.",4.20,6.50,9.00,Most common for AI wearables
+Memory,2GB + 32GB eMMC,"High: smart display, local LLM, multi-model AI.",8.00,11.50,16.00,Required for on-device LLM
+Memory,8MB PSRAM + 4MB Flash,"MCU-tier: ESP32-S3 builds, no discrete RAM.",0.85,1.40,2.20,Built into ESP32-S3 module pricing
+Display,No display,Audio-only device (like Plaud NotePin).,0.00,0.00,0.00,Simplest BOM -- recommended for v1
+Display,0.96in OLED (mono),"Simple status display, 128x64.",0.80,1.20,1.80,SSD1306 driver -- well-supported
+Display,1.54in AMOLED (color),"Smartwatch-tier, 240x240.",3.00,5.00,8.00,Significant power draw -- plan battery accordingly
+Display,2.4in TFT LCD IPS,"Full color display, 320x240.",2.50,4.00,6.00,Cheapest color option
+Display,2.13in E-ink,"Ultra-low power, 212x104.",4.00,6.00,9.00,Great for always-on status displays
+Battery,100-150mAh,"Ultra-slim pendant, ~4hr runtime.",0.40,0.65,0.90,Minimum viable for demo devices
+Battery,300-500mAh,"Compact wearable, ~8-12hr runtime.",1.00,1.40,2.00,Sweet spot for AI pendants/badges
+Battery,800-1000mAh,"Full-day device, ~16-20hr runtime.",1.50,2.20,3.20,Standard for smartwatch-class devices
+Battery,1500-2000mAh,"Multi-day, larger form factor required.",2.50,3.80,5.50,Requires larger enclosure -- consider trade-offs
+Connectivity,WiFi + BLE (built-in),Included in ESP32-S3. No extra cost.,0.00,0.00,0.00,Only applies to Espressif SoCs
+Connectivity,BLE 5.0 module,"nRF52840-based, ultra-low power.",2.00,3.50,5.00,Best for battery-constrained devices
+Connectivity,WiFi/BT module (add-on),For non-Espressif SoCs.,1.50,2.50,4.00,Required when using Rockchip/MTK SoCs
+Connectivity,4G LTE Cat-1,Quectel EC21/EC25. Adds SIM slot + antenna.,7.00,10.00,15.00,Significant cost -- only if WiFi not an option
+Connectivity,GPS/GNSS add-on,Location tracking.,1.50,5.00,8.00,Additional to other connectivity
+Sensors,MEMS Microphones (x2),PDM/I2S. Essential for voice AI.,0.60,1.00,1.80,Use two for noise cancellation
+Sensors,6-axis IMU,Accelerometer + Gyroscope.,0.40,0.80,1.50,Activity detection and gesture recognition
+Sensors,Camera 2MP (OV2640),"Basic AI vision, fixed focus.",1.50,2.50,4.00,Adequate for most CV tasks
+Sensors,Camera 5MP (OV5640),"Higher resolution, auto-focus.",3.00,5.00,8.00,Only if resolution is a feature differentiator
+Sensors,Environmental (temp/humidity/pressure),SHT30 + BMP280 combo.,0.50,0.90,1.60,Cheap to add -- good for health wearables
+Fixed Cost,PCB (4-layer rigid ~50cm2),Standard 4-layer PCB for AI device.,0.50,0.90,1.50,Per-unit at 1K volume
+Fixed Cost,Enclosure (injection mold 2-part),Production injection-molded enclosure.,4.50,8.00,13.00,Per-unit -- mold cost is separate NRE
+Fixed Cost,SMT Assembly (medium complexity),Pick-and-place + reflow + inspection.,3.00,5.00,8.00,150-300 component placements
+Fixed Cost,Manual assembly + testing,Final assembly and functional test.,1.30,2.50,4.50,Labor cost in Shenzhen -- will decrease at volume
+Fixed Cost,"Passives, connectors, USB-C, LEDs",All small passive components.,0.90,1.45,2.25,Often underestimated -- track carefully
+Fixed Cost,Charging IC + power management,Battery charging and voltage regulation.,0.35,0.65,1.10,TP4056 (basic) to IP5306 (power path)
