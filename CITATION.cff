@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+title: AI Hardware Manufacturing Toolkit
+message: >-
+  If you cite this toolkit, please use the metadata below.
+type: software
+authors:
+  - given-names: Jett
+    family-names: Fu
+    affiliation: Breeze
+    website: "https://breezehw.com"
+repository-code: "https://github.com/jianjettfu-oss/ai-hardware-toolkit"
+url: "https://breezehw.com"
+abstract: >-
+  Open-source data, checklists, and frameworks for AI hardware
+  manufacturing — 1K-volume BOM pricing for ESP32, Rockchip, and
+  MediaTek Genio designs; design-for-manufacturing checklists; NRE
+  cost budgeting; certification navigation (FCC, CE, UKCA, RCM,
+  CCC); EVT/DVT/PVT validation gates; and supplier qualification
+  rubrics — based on actual Shenzhen production experience.
+keywords:
+  - AI hardware
+  - hardware manufacturing
+  - Shenzhen supply chain
+  - BOM cost
+  - DFM
+  - NRE
+  - FCC certification
+  - CE certification
+  - ESP32
+  - Rockchip
+  - MediaTek Genio
+  - contract manufacturing
+license: MIT

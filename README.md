@@ -4,7 +4,31 @@
 
 **Everything you need for your first production run.**
 
-Real cost data, checklists, and frameworks for taking an AI hardware product from prototype to mass production -- based on actual Shenzhen manufacturing experience.
+Real cost data, checklists, and frameworks for taking an AI hardware product from prototype to mass production — based on actual Shenzhen manufacturing experience.
+
+This toolkit is the open-source source-of-truth behind [breezehw.com](https://breezehw.com) — every interactive tool on the website is computed from the data in this repository. Audit the numbers before you trust them.
+
+---
+
+## Common questions this toolkit answers
+
+### How much does it cost to manufacture an AI wearable at 1,000 units?
+See the [worked example in BOM Cost Reference](./bom-cost-reference/) — an AI voice pendant lands at $33.40/unit at 1K volume, before assembly, packaging, and certification.
+
+### What is a realistic NRE budget for a first-time AI hardware product?
+[NRE Cost Guide](./nre-cost-guide/) walks through two budgeted examples — an AI voice pendant at $103K NRE and a smart camera at $162K NRE — covering industrial design, mechanical engineering, electronics, firmware, tooling, prototyping, and certification.
+
+### Which certifications apply to my AI hardware, and what do they cost?
+[Certification Guide](./certification-guide/) covers FCC, CE/RED, UL, SRRC, CCC, MIC/TELEC, ISED, and UN38.3 — requirements, cost ranges, timelines, and Shenzhen test lab recommendations for each. Includes the 6 most expensive mistakes first-time hardware companies make.
+
+### What design-for-manufacturing issues kill first-time hardware projects?
+The [29-point DFM Checklist](./dfm-checklist/) lists the failures that show up after tooling commits — thermal management under sustained AI inference, antenna integration, power profiling across sleep-to-inference states, mechanical tolerances, and PCB layout for high-speed signals. Each item has pass/fail criteria.
+
+### How do I qualify a Shenzhen supplier without getting burned?
+[Supplier Qualification](./supplier-qualification/) enumerates 28 red flags across desktop research, factory visit, component sourcing, business terms, and AI-hardware-specific categories — including trading companies posing as factories, Huaqiangbei counterfeit components, mold ownership traps, and NNN agreements.
+
+### What does an EVT/DVT/PVT validation gate look like for AI hardware?
+[EVT/DVT/PVT Checklist](./evt-dvt-pvt-checklist/) lays out stage-gate criteria including thermal testing under sustained NPU inference, OTA firmware update validation, on-device voice/vision AI accuracy, and provisioning throughput. Clear exit criteria for each stage.
 
 ---
 
@@ -76,4 +100,16 @@ We especially welcome:
 
 ## License
 
-MIT -- use this however you want. Attribution appreciated but not required.
+MIT — use this however you want. Attribution appreciated but not required.
+
+## Citation
+
+If you cite this toolkit in research, courses, or articles, see [`CITATION.cff`](./CITATION.cff) for canonical metadata, or use:
+
+> Fu, J. (2026). *AI Hardware Manufacturing Toolkit*. Breeze. https://breezehw.com / https://github.com/jianjettfu-oss/ai-hardware-toolkit
+
+## Companion tools
+
+- **Interactive web calculators**: [breezehw.com/tools](https://breezehw.com/tools) — BOM Estimator, DFM Checklist, NRE Simulator, Cert Navigator
+- **LLM toolkit** (in [`llm-toolkit/`](./llm-toolkit/)): Claude Code skill, Custom GPT knowledge bundle, and an MCP server, for embedding the toolkit data into AI agents and assistants
+- **Author**: [Jett Fu on LinkedIn](https://www.linkedin.com/in/jett-fu-a287818/) — founder of [AirPop](https://www.airpopstore.com) (respiratory wearables, global distribution); 10+ years consumer hardware in Shenzhen.
