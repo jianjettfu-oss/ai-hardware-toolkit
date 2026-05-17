@@ -144,8 +144,12 @@ const NRE_CATEGORIES: Record<string, { tiers: { name: string; description: strin
     tiers: [
       { name: "FCC (US)", description: "Federal Communications Commission.", low: 3000, mid: 5000, high: 10000 },
       { name: "CE/RED (EU)", description: "Radio Equipment Directive.", low: 3000, mid: 6000, high: 12000 },
+      { name: "UKCA (UK)", description: "UK Conformity Assessed — mostly CE-derived test data plus UK DoC.", low: 2500, mid: 5000, high: 10000 },
       { name: "UL/IEC 62368", description: "Global safety certification.", low: 5000, mid: 10000, high: 20000 },
       { name: "SRRC + CCC (China)", description: "Chinese radio + compulsory cert.", low: 4000, mid: 8000, high: 15000 },
+      { name: "MIC/TELEC (Japan)", description: "Japanese radio equipment certification.", low: 3000, mid: 5000, high: 10000 },
+      { name: "ISED (Canada)", description: "Canadian radio + RF exposure cert (accepts FCC data).", low: 2000, mid: 4000, high: 8000 },
+      { name: "RCM (AU/NZ)", description: "Australia + NZ EMC/radio/safety mark — accepts FCC/CE data.", low: 2000, mid: 4000, high: 8000 },
       { name: "UN38.3 (Battery)", description: "Lithium battery transport.", low: 1500, mid: 3000, high: 5000 },
     ],
   },
@@ -258,6 +262,58 @@ const CERTIFICATIONS: Record<string, { fullName: string; region: string; timelin
       "Typically faster than FCC",
     ],
   },
+  CCC: {
+    fullName: "China Compulsory Certificate (中国强制性产品认证)",
+    region: "China",
+    timeline: "8-14 weeks",
+    costLow: 4000, costMid: 8000, costHigh: 18000,
+    required: true,
+    keyRequirements: [
+      "Required for many product categories sold in mainland China — applicability depends on HS code (battery, charger, AC adapter most common for AI hardware)",
+      "Chinese entity as applicant (or authorized agent)",
+      "Factory inspection on first cert; surveillance audits annually",
+      "Distinct from SRRC — SRRC handles RF, CCC handles product safety",
+    ],
+    tips: [
+      "Many AI-hardware items (USB-powered, low-voltage) fall outside CCC scope — verify with CNCA list before budgeting",
+      "Bundle CCC + SRRC at one HK/SZ-affiliated lab to share factory-audit visit",
+      "Lithium-ion battery cells often require separate CQC mark (voluntary but often required by retail buyers)",
+    ],
+  },
+  UKCA: {
+    fullName: "UK Conformity Assessed",
+    region: "United Kingdom",
+    timeline: "4-8 weeks",
+    costLow: 2500, costMid: 5000, costHigh: 10000,
+    required: true,
+    keyRequirements: [
+      "Required for products sold in Great Britain (England/Scotland/Wales); Northern Ireland still uses CE",
+      "Largely mirrors CE/RED requirements — UK Approved Body or self-declared depending on product class",
+      "DoC + technical file + UK Responsible Person if importer not UK-based",
+    ],
+    tips: [
+      "If you already have CE/RED, UKCA is mostly re-labeling + a UK address on DoC",
+      "CE/UKCA equivalence has been extended through Dec 2027 for many product classes — verify current OPSS guidance",
+      "Indefinite CE recognition does NOT apply to all categories — radio equipment specifically still needs UKCA",
+    ],
+  },
+  RCM: {
+    fullName: "Regulatory Compliance Mark (Australia / New Zealand)",
+    region: "Australia & New Zealand",
+    timeline: "4-6 weeks",
+    costLow: 2000, costMid: 4000, costHigh: 8000,
+    required: true,
+    keyRequirements: [
+      "Covers EMC (AS/NZS CISPR), radiocommunications (AS/NZS 4268), and electrical safety (AS/NZS 62368)",
+      "Australian or New Zealand supplier address required on DoC — local importer typically takes this role",
+      "Register supplier on ACMA Supplier Code Database",
+    ],
+    tips: [
+      "Test data from FCC/CE/IEC reports is widely accepted — saves 50-70% on retesting",
+      "RCM = single mark covering ACMA + ERAC + EESS — simpler than separate national marks",
+      "Mandatory for Amazon.au and most AU retailers",
+    ],
+  },
   "UN38.3": {
     fullName: "UN Manual of Tests and Criteria Section 38.3",
     region: "Global (all markets with lithium battery)",
@@ -280,11 +336,13 @@ const CERTIFICATIONS: Record<string, { fullName: string; region: string; timelin
 const MARKET_CERTS: Record<string, string[]> = {
   "US": ["FCC", "UN38.3"],
   "EU": ["CE/RED", "UN38.3"],
-  "China": ["SRRC", "UN38.3"],
+  "UK": ["UKCA", "UN38.3"],
+  "China": ["SRRC", "CCC", "UN38.3"],
   "Japan": ["MIC/TELEC", "UN38.3"],
   "Canada": ["ISED", "UN38.3"],
+  "Australia": ["RCM", "UN38.3"],
   "US+EU": ["FCC", "CE/RED", "UN38.3"],
-  "Global": ["FCC", "CE/RED", "UL/IEC 62368", "SRRC", "MIC/TELEC", "ISED", "UN38.3"],
+  "Global": ["FCC", "CE/RED", "UKCA", "UL/IEC 62368", "SRRC", "CCC", "MIC/TELEC", "ISED", "RCM", "UN38.3"],
 };
 
 const SUPPLIER_RED_FLAGS = [
@@ -552,7 +610,7 @@ server.tool(
     firmware: z.enum(["Basic", "On-device AI", "Full stack"]).describe("Software scope"),
     tooling: z.enum(["Soft mold", "Production mold", "Complex mold"]).describe("Tooling type"),
     prototyping_stages: z.array(z.enum(["3D printed enclosure", "PCBA prototypes", "EVT build", "DVT build"])).describe("Prototyping stages needed"),
-    certifications: z.array(z.enum(["FCC (US)", "CE/RED (EU)", "UL/IEC 62368", "SRRC + CCC (China)", "UN38.3 (Battery)"])).describe("Required certifications"),
+    certifications: z.array(z.enum(["FCC (US)", "CE/RED (EU)", "UKCA (UK)", "UL/IEC 62368", "SRRC + CCC (China)", "MIC/TELEC (Japan)", "ISED (Canada)", "RCM (AU/NZ)", "UN38.3 (Battery)"])).describe("Required certifications"),
     price_point: z.enum(["low", "mid", "high"]).default("mid").describe("Estimate tier"),
   },
   async ({ industrial_design, mechanical, electronics, firmware, tooling, prototyping_stages, certifications, price_point }) => {
@@ -612,7 +670,7 @@ server.tool(
   "plan_certification",
   "Plan certification requirements based on target markets and device features. Returns required certs, costs, and timeline.",
   {
-    markets: z.array(z.enum(["US", "EU", "China", "Japan", "Canada"])).describe("Target markets"),
+    markets: z.array(z.enum(["US", "EU", "UK", "China", "Japan", "Canada", "Australia"])).describe("Target markets"),
     has_lithium_battery: z.boolean().default(true).describe("Device has lithium battery (default: true)"),
     is_body_worn: z.boolean().default(false).describe("Device is worn on the body"),
     has_wifi: z.boolean().default(true).describe("Device has WiFi"),

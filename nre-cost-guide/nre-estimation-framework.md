@@ -111,8 +111,12 @@ Regulatory testing and compliance for target markets.
 |--------------|--------|-----|-----|------|
 | FCC | United States | $3,000 | $5,000 | $10,000 |
 | CE / RED | European Union | $3,000 | $6,000 | $12,000 |
+| UKCA | United Kingdom | $2,500 | $5,000 | $10,000 |
 | UL / IEC 62368 | Global (Safety) | $5,000 | $10,000 | $20,000 |
 | SRRC + CCC | China | $4,000 | $8,000 | $15,000 |
+| MIC / TELEC | Japan | $3,000 | $5,000 | $10,000 |
+| ISED | Canada | $2,000 | $4,000 | $8,000 |
+| RCM | Australia & NZ | $2,000 | $4,000 | $8,000 |
 | UN38.3 | Global (Battery transport) | $1,500 | $3,000 | $5,000 |
 
 **Timeline:** ~10 weeks

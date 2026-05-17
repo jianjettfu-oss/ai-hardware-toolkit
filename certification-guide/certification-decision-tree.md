@@ -12,10 +12,12 @@ Your target markets determine which certifications are mandatory:
 |--------|---------------|------------------------|
 | United States | FCC | UL / IEC 62368 |
 | European Union | CE / RED | -- |
-| China | SRRC + CCC (if applicable) | -- |
+| United Kingdom | UKCA (Great Britain) — CE still valid in Northern Ireland | -- |
+| China | SRRC + CCC (if applicable) | CQC for lithium cells |
 | Japan | MIC / TELEC | -- |
 | Canada | ISED | -- |
-| Global (all major) | FCC + CE + UL + SRRC + MIC + ISED | -- |
+| Australia & New Zealand | RCM (covers EMC + radio + safety) | -- |
+| Global (all major) | FCC + CE + UKCA + UL + SRRC + MIC + ISED + RCM | -- |
 
 **If your device has a lithium battery (almost all AI hardware does), add UN38.3 to every market.** Without it, your batteries cannot be shipped by air. Your entire supply chain stops.
 

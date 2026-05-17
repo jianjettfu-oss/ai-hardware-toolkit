@@ -1,0 +1,27 @@
+name: Security audit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Weekly Monday 09:17 UTC — surfaces new advisories without blocking PRs.
+    - cron: '17 9 * * 1'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: llm-toolkit/mcp-server
+        run: npm ci
+
+      - name: Run npm audit (fail on moderate+)
+        working-directory: llm-toolkit/mcp-server
+        run: npm audit --audit-level=moderate
