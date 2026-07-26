@@ -23,36 +23,73 @@ jobs:
         run: npm ci
 
       # The gate must distinguish "no vulnerabilities" from "could not ask".
-      # `npm audit --audit-level=moderate` conflates the two: as of 2026-07-25 the
+      # `npm audit --audit-level=X` conflates the two: as of 2026-07-25 the
       # registry's /security/audits/quick endpoint returns 400 ("This endpoint is
       # being retired"), which reads identically to a real finding. Worse in the
       # other direction — if a degraded endpoint ever answers 200 with an empty
       # advisory set, the same command reads GREEN and the gate goes blind.
-      # So parse the report ourselves: unreachable -> ::warning:: DEGRADED,
-      # real moderate+ advisories -> hard fail. NOT continue-on-error, which
-      # would be permanent silence.
-      - name: Run npm audit (fail on moderate+)
+      # So parse the report ourselves.
+      #
+      # 2026-07-27 — three changes, all from one incident. This workflow had
+      # failed on EVERY scheduled run from 2026-06-01 to 2026-07-20 (8 straight
+      # Mondays) on real advisories nobody cleared, and its one green run
+      # (30192687188, 07-26) was green only because DEGRADED exited 0 — it
+      # checked nothing. The failures were invisible because their sole channel
+      # was a GitHub notification email, which DM's inbox triage archives as a
+      # "CI notification" by rule.
+      #
+      # (a) RETRY. npm's quick-audit endpoint is mid-retirement and returns an
+      #     intermittent 400; a single attempt reports "unreachable" for what is
+      #     usually transient.
+      #
+      # (b) PERSISTENT DEGRADED NOW FAILS. A run that could not check the
+      #     dependencies must not be indistinguishable from a clean one. This
+      #     mirrors digital-me's ci.yml (7ee8fb3) — same lesson, same repo owner.
+      #
+      # (c) THRESHOLD ALIGNED TO high/critical, matching digital-me's house
+      #     standard. Two moderate advisories remain and are upstream-blocked,
+      #     not accepted risk-by-convenience: @hono/node-server <2.0.5 (Windows
+      #     path traversal in serve-static, GHSA-frvp-7c67-39w9) reaches us only
+      #     through @modelcontextprotocol/sdk, whose own manifest pins
+      #     `@hono/node-server: ^1.19.9` — the patched line is 2.x, so no
+      #     override exists that does not violate the SDK's declared range. This
+      #     server is stdio-only (`node dist/index.js`), never serves static
+      #     files, and never runs on Windows. Moderates are still PRINTED every
+      #     run, so this is visible, not silent.
+      #
+      #     Re-tighten to moderate+ the moment the SDK moves to
+      #     `@hono/node-server ^2` — check with
+      #     `npm view @modelcontextprotocol/sdk dependencies`.
+      - name: Run npm audit (fail on high/critical)
         working-directory: llm-toolkit/mcp-server
         run: |
-          npm audit --json > audit.json 2> audit.err || true
+          for attempt in 1 2 3; do
+            npm audit --json > audit.json 2> audit.err || true
+            if node -e 'const r=JSON.parse(require("fs").readFileSync("audit.json","utf8")); process.exit(r.metadata && r.metadata.vulnerabilities ? 0 : 1)' 2>/dev/null; then
+              [ "$attempt" -gt 1 ] && echo "audit succeeded on attempt $attempt"
+              break
+            fi
+            echo "audit attempt $attempt did not return a usable report"
+            [ "$attempt" -lt 3 ] && sleep $((attempt * 10))
+          done
           node -e '
             const fs = require("fs");
             let report = null;
             try { report = JSON.parse(fs.readFileSync("audit.json", "utf8")); } catch {}
             const counts = report && report.metadata && report.metadata.vulnerabilities;
             if (!counts) {
-              console.log("::warning title=Security gate DEGRADED::npm audit endpoint unreachable — dependencies were NOT checked this run");
+              console.log("::error title=Security gate DEGRADED::npm audit unreachable after 3 attempts — dependencies were NOT checked. This is red on purpose: a run that checked nothing must not read green.");
               console.log("--- npm stderr ---");
               try { console.log(fs.readFileSync("audit.err", "utf8").slice(0, 2000)); } catch {}
-              process.exit(0);
+              process.exit(1);
             }
             for (const [name, adv] of Object.entries(report.vulnerabilities || {})) {
               if (adv.severity !== "info" && adv.severity !== "low") console.log(adv.severity + "\t" + name);
             }
-            const n = (counts.moderate || 0) + (counts.high || 0) + (counts.critical || 0);
+            const n = (counts.high || 0) + (counts.critical || 0);
             if (n > 0) {
-              console.log("::error title=Vulnerable dependencies::" + n + " moderate+ advisory(ies) — run `npm audit fix`");
+              console.log("::error title=Vulnerable dependencies::" + n + " high/critical advisory(ies) — run `npm audit fix`");
               process.exit(1);
             }
-            console.log("npm audit clean — 0 moderate+");
+            console.log("npm audit clean — 0 high/critical (" + (counts.moderate || 0) + " moderate below the gate, see workflow comment)");
           '
