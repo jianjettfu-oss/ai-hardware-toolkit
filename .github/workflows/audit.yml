@@ -12,9 +12,9 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
 
@@ -22,6 +22,37 @@ jobs:
         working-directory: llm-toolkit/mcp-server
         run: npm ci
 
+      # The gate must distinguish "no vulnerabilities" from "could not ask".
+      # `npm audit --audit-level=moderate` conflates the two: as of 2026-07-25 the
+      # registry's /security/audits/quick endpoint returns 400 ("This endpoint is
+      # being retired"), which reads identically to a real finding. Worse in the
+      # other direction — if a degraded endpoint ever answers 200 with an empty
+      # advisory set, the same command reads GREEN and the gate goes blind.
+      # So parse the report ourselves: unreachable -> ::warning:: DEGRADED,
+      # real moderate+ advisories -> hard fail. NOT continue-on-error, which
+      # would be permanent silence.
       - name: Run npm audit (fail on moderate+)
         working-directory: llm-toolkit/mcp-server
-        run: npm audit --audit-level=moderate
+        run: |
+          npm audit --json > audit.json 2> audit.err || true
+          node -e '
+            const fs = require("fs");
+            let report = null;
+            try { report = JSON.parse(fs.readFileSync("audit.json", "utf8")); } catch {}
+            const counts = report && report.metadata && report.metadata.vulnerabilities;
+            if (!counts) {
+              console.log("::warning title=Security gate DEGRADED::npm audit endpoint unreachable — dependencies were NOT checked this run");
+              console.log("--- npm stderr ---");
+              try { console.log(fs.readFileSync("audit.err", "utf8").slice(0, 2000)); } catch {}
+              process.exit(0);
+            }
+            for (const [name, adv] of Object.entries(report.vulnerabilities || {})) {
+              if (adv.severity !== "info" && adv.severity !== "low") console.log(adv.severity + "\t" + name);
+            }
+            const n = (counts.moderate || 0) + (counts.high || 0) + (counts.critical || 0);
+            if (n > 0) {
+              console.log("::error title=Vulnerable dependencies::" + n + " moderate+ advisory(ies) — run `npm audit fix`");
+              process.exit(1);
+            }
+            console.log("npm audit clean — 0 moderate+");
+          '
