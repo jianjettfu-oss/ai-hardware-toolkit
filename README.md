@@ -27,6 +27,9 @@ The [29-point DFM Checklist](./dfm-checklist/) lists the failures that show up a
 ### How do I qualify a Shenzhen supplier without getting burned?
 [Supplier Qualification](./supplier-qualification/) enumerates 28 red flags across desktop research, factory visit, component sourcing, business terms, and AI-hardware-specific categories — including trading companies posing as factories, Huaqiangbei counterfeit components, mold ownership traps, and NNN agreements.
 
+### What should I check before an AI-made design goes to a factory?
+The [AI-Made Design → Factory Handoff Checklist](./ai-design-handoff/) splits the review into what a machine can check, what only a prototype answers, and what a person has to sign off, with the handoff package a factory asks for. Each "where AI is today" number links to its source.
+
 ### What does an EVT/DVT/PVT validation gate look like for AI hardware?
 [EVT/DVT/PVT Checklist](./evt-dvt-pvt-checklist/) lays out stage-gate criteria including thermal testing under sustained NPU inference, OTA firmware update validation, on-device voice/vision AI accuracy, and provisioning throughput. Clear exit criteria for each stage.
 
@@ -49,6 +52,9 @@ Decision tree for regulatory certifications: FCC, CE/RED, UL, SRRC, CCC, MIC/TEL
 ### [EVT/DVT/PVT Checklist](./evt-dvt-pvt-checklist/)
 Stage-gate validation checklists for Engineering Validation Test (10-30 units), Design Validation Test (30-100 units), and Production Validation Test (100-500 units). AI-hardware-specific criteria: thermal testing under sustained NPU inference, OTA firmware update validation, voice/vision AI accuracy on-device, and automated provisioning throughput. Clear exit criteria for each stage.
 
+### [AI-Made Design → Factory Handoff](./ai-design-handoff/)
+Checklist for files drawn with AI tools (CAD, schematic, layout, firmware): three layers (machine-checkable, physical test, human sign-off), the handoff package a factory needs, and a dated table of where AI design tools work and where they break, with sources.
+
 ### [Supplier Qualification](./supplier-qualification/)
 28 red flags when evaluating Shenzhen electronics manufacturers, organized into desktop research, factory visit, component sourcing, business terms, and AI-hardware-specific categories. Covers: trading companies posing as factories, Huaqiangbei counterfeit components, mold ownership traps, NNN agreements, and why a supplier who dismisses your thermal concerns is a deal-breaker. Includes a weighted evaluation scorecard.
 
@@ -64,6 +70,7 @@ These guides are also available as interactive web tools:
 | DFM Checklist | [breezehw.com/tools/dfm-checklist](https://breezehw.com/tools/dfm-checklist) |
 | NRE Simulator | [breezehw.com/tools/nre-simulator](https://breezehw.com/tools/nre-simulator) |
 | Certification Navigator | [breezehw.com/tools/cert-navigator](https://breezehw.com/tools/cert-navigator) |
+| AI Design → Factory Guide | [breezehw.com/ai-design-to-factory](https://breezehw.com/ai-design-to-factory) |
 
 ---
 
