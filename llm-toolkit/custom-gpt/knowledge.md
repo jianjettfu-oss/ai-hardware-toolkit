@@ -573,7 +573,7 @@ Your target markets determine which certifications are mandatory:
 | Market | Required Certs | Optional but Recommended |
 |--------|---------------|------------------------|
 | United States | FCC | UL / IEC 62368 |
-| European Union | CE / RED | -- |
+| European Union | CE / RED (includes cybersecurity since 2025-08-01) | -- |
 | United Kingdom | UKCA (Great Britain) — CE still valid in Northern Ireland | -- |
 | China | SRRC + CCC (if applicable) | CQC for lithium cells |
 | Japan | MIC / TELEC | -- |
@@ -582,6 +582,8 @@ Your target markets determine which certifications are mandatory:
 | Global (all major) | FCC + CE + UKCA + UL + SRRC + MIC + ISED + RCM | -- |
 
 **If your device has a lithium battery (almost all AI hardware does), add UN38.3 to every market.** Without it, your batteries cannot be shipped by air. Your entire supply chain stops.
+
+**If you sell in the EU, two rules reach back into the design itself:** the cybersecurity requirements under CE / RED, and user-replaceable batteries from 18 February 2027. Both are covered below. A lab can't fix either one at certification time.
 
 ---
 
@@ -624,15 +626,40 @@ Your target markets determine which certifications are mandatory:
 - EN 62368-1 -- Safety (replaces EN 60950-1)
 - EN 62311 -- Human exposure to electromagnetic fields (SAR for body-worn)
 - Declaration of Conformity (DoC) required
-- Authorized representative in the EU required since 2021
+- Cybersecurity (RED Article 3(3)(d)(e)(f)) for connected, wearable and payment devices since 1 August 2025 -- see below
+- An economic operator established in the EU must be responsible for the product since 16 July 2021: an EU manufacturer, an importer, an authorised representative, or a fulfilment service provider (Regulation (EU) 2019/1020, Article 4)
 
 **Tips:**
 - CE and FCC testing can be done in parallel at the same lab to save time
 - Body-worn devices need SAR testing -- budget extra $3K-5K
-- You need an EU-based Authorized Representative (can be a service for ~$500/yr)
+- With no EU importer, an authorised-representative service fills that role (~$500/yr)
 - Keep the Technical File (design docs, test reports, risk assessment) for 10 years
 
 **Test labs:** SGS (Shenzhen), Bureau Veritas, TUV Rheinland, CTTL
+
+#### Cybersecurity is part of CE now (EU rules checked 2026-11-08)
+
+Since 1 August 2025, three extra RED requirements apply to most connected devices. Delegated Regulation (EU) 2022/30, as amended by (EU) 2023/2444, says which devices:
+
+| RED requirement | Applies to | Standard |
+|---|---|---|
+| 3(3)(d) Don't harm the network | Any radio device that can reach the internet, directly or through a phone or hub | EN 18031-1:2024 |
+| 3(3)(e) Protect personal data and privacy | Internet-connected devices that process personal, traffic or location data -- **and wearables, childcare devices and toys that process it, even with no internet connection** | EN 18031-2:2024 |
+| 3(3)(f) Protect against fraud | Internet-connected devices that let the user transfer money or virtual currency | EN 18031-3:2024 |
+
+The EU published these standards with restrictions (Implementing Decision (EU) 2025/138). The one that catches AI hardware is the password clause. If your device lets the user skip setting a password (clauses 6.2.5.1 and 6.2.5.2), the standard gives you no presumption of conformity. Under RED Article 17(4) you then can't self-declare that requirement. A Notified Body has to examine it (Annex III or Annex IV). Your login and pairing flow decides which route you're on, so settle it at EVT.
+
+We don't have a sourced cost or timeline for EN 18031 work. Ask your CE lab to quote it with the radio tests.
+
+**Next: the Cyber Resilience Act (Regulation (EU) 2024/2847)**
+
+| Date | What applies |
+|---|---|
+| 1 August 2025 | RED cybersecurity, as above |
+| **11 September 2026 (in force now)** | CRA Article 14 reporting. It covers products already on the EU market, including ones placed before 2027 (Article 69(3)). If you learn of an actively exploited vulnerability or a severe incident affecting your product's security, notify your coordinating CSIRT and ENISA through the single reporting platform: an early warning within 24 hours, then a notification within 72 hours (a final report follows later). |
+| 11 December 2027 | The full CRA applies. The same day, Delegated Regulation (EU) 2026/339 repeals the RED cybersecurity rules, and the CRA becomes the one cybersecurity regime for radio equipment. |
+
+Devices placed on the market from 1 August 2025 to 10 December 2027 remain subject to RED cybersecurity surveillance after the repeal (2026/339, recital 5). Devices placed before 11 December 2027 fall under the full CRA only if they are substantially modified after that date (CRA Article 69(2)).
 
 ---
 
@@ -776,6 +803,17 @@ Your target markets determine which certifications are mandatory:
 
 **Test labs:** SGS, Bureau Veritas, TUV, UL
 
+#### EU design rule: user-replaceable batteries from 18 February 2027
+
+Battery Regulation (EU) 2023/1542, Article 11. This one is about design, and no test report covers it:
+
+- A portable battery in a product sold in the EU must be removable and replaceable by the end user with commercially available tools. Proprietary tools (unless supplied free with the product), heat and solvents don't count (Art. 11(1)).
+- Appliances built to be washed, rinsed or immersed may limit replacement to independent professionals (Art. 11(2)(a)). The duty falls away entirely only where a permanent battery connection is needed for user safety or, for products whose main function is collecting and supplying data, for data integrity (Art. 11(3)). Read 11(3) narrowly before you rely on it, and check the Commission's guidelines under Art. 11(9).
+- Spare batteries must stay available for five years after the last unit of the model is placed on the market (Art. 11(7)).
+- Software must not block a compatible replacement battery (Art. 11(8)).
+
+A glued-in pouch cell in a pendant or a pin fails this rule unless an exception applies. Decide it at EVT.
+
 ---
 
 ## Step 3: Plan Your Certification Strategy
@@ -789,6 +827,8 @@ Your target markets determine which certifications are mandatory:
 | UN38.3 | $3,000 | 3-6 weeks | During DVT (battery must be final) |
 | UL (if Amazon) | $10,000 | 8-14 weeks | Parallel with above |
 | **Total** | **$14,000-24,000** | **10-14 weeks** | |
+
+If the device is internet-connected, wearable or handles payments, add EN 18031 cybersecurity to the CE quote. The figures above don't include it.
 
 ### Money-saving tactics:
 
@@ -808,10 +848,22 @@ Your target markets determine which certifications are mandatory:
 2. **Forgetting UN38.3.** Your logistics partner will refuse to ship without it.
 3. **Not budgeting for SAR testing.** Body-worn devices need it for CE. Budget $3K-5K extra.
 4. **Changing the PCB after certification.** Any change to the RF section requires re-testing.
-5. **Not having an EU Authorized Representative.** Required since 2021. Services cost ~$500/yr.
+5. **No EU-established economic operator.** Required since 16 July 2021 (Regulation (EU) 2019/1020, Art. 4). With no EU importer, an authorised-representative service (~$500/yr) fills the role.
 6. **Underestimating timeline.** Certification labs have queues. Book your slot 4-6 weeks before samples are ready.
+7. **Treating EU cybersecurity as a lab test.** Whether users can skip setting a password decides whether you can self-declare under EN 18031. Decide it at EVT.
+8. **Gluing the battery in for the EU.** From 18 February 2027 the end user must be able to replace it, unless a narrow exception applies.
 
 ---
+
+**EU sources** (official texts on EUR-Lex, checked 2026-11-08):
+[Delegated Regulation 2022/30](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R0030) ·
+[2023/2444 (start date moved to 2025-08-01)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R2444) ·
+[Implementing Decision 2025/138 (EN 18031 and its restrictions)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025D0138) ·
+[Cyber Resilience Act 2024/2847](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847) ·
+[Delegated Regulation 2026/339 (repeal)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R0339) ·
+[Battery Regulation 2023/1542](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1542) ·
+[Radio Equipment Directive 2014/53/EU](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0053) ·
+[Market Surveillance Regulation 2019/1020](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R1020)
 
 *Interactive version: [breezehw.com/tools/cert-navigator](https://breezehw.com/tools/cert-navigator)*
 

@@ -19,7 +19,7 @@ See the [worked example in BOM Cost Reference](./bom-cost-reference/) — an AI 
 [NRE Cost Guide](./nre-cost-guide/) walks through two budgeted examples — an AI voice pendant at $103K NRE and a smart camera at $162K NRE — covering industrial design, mechanical engineering, electronics, firmware, tooling, prototyping, and certification.
 
 ### Which certifications apply to my AI hardware, and what do they cost?
-[Certification Guide](./certification-guide/) covers FCC, CE/RED, UL, SRRC, CCC, MIC/TELEC, ISED, and UN38.3 — requirements, cost ranges, timelines, and Shenzhen test lab recommendations for each. Includes the 6 most expensive mistakes first-time hardware companies make.
+[Certification Guide](./certification-guide/) covers FCC, CE/RED, UL, SRRC, CCC, MIC/TELEC, ISED, and UN38.3 — requirements, cost ranges, timelines, and Shenzhen test lab recommendations for each. Also covers the EU rules that reach into the design: RED cybersecurity (EN 18031), Cyber Resilience Act reporting (in force since 2026-09-11) and user-replaceable batteries from 2027-02-18. Includes the 8 most expensive mistakes first-time hardware companies make.
 
 ### What design-for-manufacturing issues kill first-time hardware projects?
 The [29-point DFM Checklist](./dfm-checklist/) lists the failures that show up after tooling commits — thermal management under sustained AI inference, antenna integration, power profiling across sleep-to-inference states, mechanical tolerances, and PCB layout for high-speed signals. Each item has pass/fail criteria.
@@ -47,7 +47,7 @@ Shenzhen component pricing at 1,000-unit volume for every major component in an 
 Non-Recurring Engineering cost framework covering industrial design, mechanical engineering, electronics engineering, firmware/software, tooling, prototyping, and certification. Low/mid/high estimates for each tier. Includes two fully budgeted examples: an AI voice pendant ($103K NRE) and a smart camera ($162K NRE), plus a timeline showing how 6-9 months of development phases overlap.
 
 ### [Certification Guide](./certification-guide/)
-Decision tree for regulatory certifications: FCC, CE/RED, UL, SRRC, CCC, MIC/TELEC, ISED, and UN38.3. For each certification: requirements, cost range, timeline, Shenzhen test lab recommendations, and money-saving tactics. Includes a certification strategy for US+EU launch and the 6 most expensive mistakes first-time hardware companies make.
+Decision tree for regulatory certifications: FCC, CE/RED, UL, SRRC, CCC, MIC/TELEC, ISED, and UN38.3. For each certification: requirements, cost range, timeline, Shenzhen test lab recommendations, and money-saving tactics. Includes a certification strategy for US+EU launch, the EU cybersecurity and battery rules with links to the official texts (checked 2026-11-08), and the 8 most expensive mistakes first-time hardware companies make.
 
 ### [EVT/DVT/PVT Checklist](./evt-dvt-pvt-checklist/)
 Stage-gate validation checklists for Engineering Validation Test (10-30 units), Design Validation Test (30-100 units), and Production Validation Test (100-500 units). AI-hardware-specific criteria: thermal testing under sustained NPU inference, OTA firmware update validation, voice/vision AI accuracy on-device, and automated provisioning throughput. Clear exit criteria for each stage.

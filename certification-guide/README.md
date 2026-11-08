@@ -20,9 +20,11 @@ Which regulatory certifications you need, what they cost, and how to avoid the m
 
 Each certification includes: requirements, cost range, timeline, specific test lab recommendations in Shenzhen, and tips from real hardware projects.
 
+For the EU, the guide also covers three rules you have to settle in the design, not at the lab: RED cybersecurity (EN 18031, since 2025-08-01), Cyber Resilience Act reporting (already in force since 2026-09-11) and user-replaceable batteries (from 2027-02-18). Each one links to the official text on EUR-Lex.
+
 ## The Most Expensive Mistakes
 
-The guide covers 6 common mistakes, but these two cost the most:
+The guide covers 8 common mistakes, but these two cost the most:
 
 1. **Certifying before design freeze.** Any PCB change after certification means re-testing ($3K-5K+ and 4-8 weeks lost).
 2. **Forgetting UN38.3.** Without it, your freight forwarder will refuse to ship your batteries. Your entire supply chain stops.
