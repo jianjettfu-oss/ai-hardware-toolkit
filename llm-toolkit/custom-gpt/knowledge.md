@@ -1023,7 +1023,7 @@ This checklist is written for AI hardware -- wearables, edge AI devices, voice r
 
 ## PVT -- Production Validation Test
 
-**Goal:** Prove the factory can build the product consistently at quality and speed targets. This is not a design validation -- it's a manufacturing process validation.  
+**Goal:** Prove the factory can build the product consistently at quality and speed targets. PVT tests the manufacturing process; the design was settled in DVT.  
 **Typical volume:** 100-500 units (first production run)  
 **Assembly:** Full production line. Production tooling. Production test fixtures.  
 **Who's involved:** Manufacturing engineer, QA, factory team

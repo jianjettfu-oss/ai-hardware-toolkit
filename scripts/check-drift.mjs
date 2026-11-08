@@ -5,7 +5,9 @@
 //   node scripts/check-drift.mjs --site ../breeze   also the breezehw.com tool data
 //
 // Compares: component prices (CSV), DFM item count, certification cost and timeline,
-// supplier red-flag count. Exit 1 on any mismatch, with one line per mismatch.
+// supplier red-flag count, and (site only) the EVT/DVT/PVT guide data: per-stage units,
+// weeks, deliverable, goal, assembly and stop line, every check shown (by code), and the
+// timeline note. Exit 1 on any mismatch, with one line per mismatch.
 
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -48,6 +50,26 @@ for (const m of certMd.matchAll(/^### (.+?) \(([^)]*)\)\n([\s\S]*?)(?=^### |^## 
 }
 const flagMd = read(join(ROOT, "supplier-qualification/supplier-red-flags.md"));
 const flagCount = (flagMd.split(/^## Green Flags/m)[0].match(/^\|\s*\d+\s*\|\s*\*\*/gm) || []).length;
+
+// validation stages: per-stage facts + every check row, keyed by stage name / check code
+const stageMd = read(join(ROOT, "evt-dvt-pvt-checklist/validation-stages.md"));
+const stages = {};
+for (const m of stageMd.matchAll(/^## (EVT|DVT|PVT) -- [^\n]*\n([\s\S]*?)(?=^## )/gm)) {
+  const body = m[2];
+  stages[m[1]] = {
+    goal: body.match(/^\*\*Goal:\*\*\s*(.+?)\s*$/m)?.[1],
+    assembly: body.match(/^\*\*Assembly:\*\*\s*(.+?)\s*$/m)?.[1],
+    stopIf: body.match(/^\*\*Do NOT [^:]+:\*\*\s*(.+?)\s*$/m)?.[1],
+  };
+}
+for (const m of stageMd.matchAll(/^\|\s*(EVT|DVT|PVT)\s*\|\s*([\d-]+) weeks\s*\|\s*([\d-]+)\s*\|\s*(.+?)\s*\|\s*$/gm)) {
+  Object.assign((stages[m[1]] ??= {}), { weeks: m[2], units: m[3], deliverable: m[4] });
+}
+const timelineNote = stageMd.match(/^(Each stage can run longer[^\n]*?)\s*$/m)?.[1];
+const checks = {};
+for (const m of stageMd.matchAll(/^\|\s*([A-Z]{1,2}\d+)\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|/gm)) {
+  checks[m[1]] = { check: m[2], criteria: m[3] };
+}
 
 const near = (a, b) => Math.abs(a - b) < 1e-9;
 // names differ only in typography between copies: 0.96" vs 0.96in, en dash vs hyphen, × vs x, ² vs 2
@@ -115,6 +137,38 @@ if (siteArg > -1) {
     const dfm = read(join(tools, "dfm-checklist/data.ts"));
     const siteDfm = (dfm.match(/^\s{8,}id:\s*"/gm) || []).length;
     if (siteDfm !== dfmCount) say(`site: DFM items ${siteDfm} ≠ source ${dfmCount}`);
+  }
+
+  const stagePath = join(site, "src/app/evt-dvt-pvt/data.ts");
+  if (existsSync(stagePath)) {
+    const sd = read(stagePath);
+    const str = (block, key) => block.match(new RegExp(`\\b${key}:\\s*"((?:[^"\\\\]|\\\\.)*)"`))?.[1];
+    const siteStages = [...sd.matchAll(/name:\s*"(EVT|DVT|PVT)",([\s\S]*?)stopIf:\s*"([^"]*)"/g)];
+    if (siteStages.length !== 3) say(`site: evt-dvt-pvt found ${siteStages.length} stages, expected 3`);
+    for (const [, name, block, stopIf] of siteStages) {
+      const src = stages[name] ?? {};
+      for (const [key, val] of [
+        ["units", str(block, "units")],
+        ["weeks", str(block, "weeks")],
+        ["deliverable", str(block, "deliverable")],
+        ["goal", str(block, "goal")],
+        ["assembly", str(block, "assembly")],
+        ["stopIf", stopIf],
+      ]) {
+        compared++;
+        if (val !== src[key]) say(`site: ${name} ${key} "${val}" ≠ source "${src[key]}"`);
+      }
+    }
+    for (const m of sd.matchAll(/\{\s*code:\s*"([^"]+)",\s*check:\s*"([^"]*)",\s*criteria:\s*"([^"]*)"\s*\}/g)) {
+      compared++;
+      const src = checks[m[1]];
+      if (!src) say(`site: check ${m[1]} not in source`);
+      else if (src.check !== m[2] || src.criteria !== m[3])
+        say(`site: check ${m[1]} "${m[2]}: ${m[3]}" ≠ source "${src.check}: ${src.criteria}"`);
+    }
+    const note = sd.match(/TIMELINE_NOTE\s*=\s*"([^"]*)"/)?.[1];
+    compared++;
+    if (note !== timelineNote) say(`site: TIMELINE_NOTE ≠ source "${timelineNote}"`);
   }
 }
 
