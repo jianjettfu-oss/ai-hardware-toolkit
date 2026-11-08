@@ -5,7 +5,8 @@
 //   node scripts/check-drift.mjs --site ../breeze   also the breezehw.com tool data
 //
 // Compares: component prices (CSV), DFM item count, certification cost and timeline,
-// supplier red-flag count, and (site only) the EVT/DVT/PVT guide data: per-stage units,
+// supplier red-flag count, and (site only) the NRE simulator tiers and category weeks
+// against nre-estimation-framework.md, the EVT/DVT/PVT guide data: per-stage units,
 // weeks, deliverable, goal, assembly and stop line, every check shown (by code), and the
 // timeline note; and every figure in the AI-design guide's "where AI is" table (numbers
 // only, since the site words it differently). Exit 1 on any mismatch, one line per mismatch.
@@ -65,6 +66,17 @@ for (const m of stageMd.matchAll(/^## (EVT|DVT|PVT) -- [^\n]*\n([\s\S]*?)(?=^## 
 }
 for (const m of stageMd.matchAll(/^\|\s*(EVT|DVT|PVT)\s*\|\s*([\d-]+) weeks\s*\|\s*([\d-]+)\s*\|\s*(.+?)\s*\|\s*$/gm)) {
   Object.assign((stages[m[1]] ??= {}), { weeks: m[2], units: m[3], deliverable: m[4] });
+}
+// NRE framework: per category, each tier row's low/mid/high and the category timeline in weeks
+const nreMd = read(join(ROOT, "nre-cost-guide/nre-estimation-framework.md"));
+const nre = {};
+for (const m of nreMd.matchAll(/^### \d+\. (.+?)\s*\n([\s\S]*?)(?=^### |^## )/gm)) {
+  const rows = [];
+  for (const r of m[2].matchAll(/^\|\s*([^|]+?)\s*\|.*?\$([\d,]+)\s*\|\s*\$([\d,]+)\s*\|\s*\$([\d,]+)\s*\|\s*$/gm)) {
+    const n = (s) => +s.replace(/,/g, "");
+    rows.push({ name: r[1], low: n(r[2]), mid: n(r[3]), high: n(r[4]) });
+  }
+  nre[m[1]] = { rows, weeks: +(m[2].match(/^\*\*Timeline:\*\*\s*~?(\d+)/m)?.[1] ?? NaN) };
 }
 const timelineNote = stageMd.match(/^(Each stage can run longer[^\n]*?)\s*$/m)?.[1];
 const checks = {};
@@ -134,6 +146,23 @@ if (siteArg > -1) {
       if (src.timeline && src.timeline !== tl) say(`site: ${m[1]} timeline "${m[2]}" ≠ source "${src.timeline}"`);
       if (src.low !== undefined && (+m[3] !== src.low || +m[4] !== src.high))
         say(`site: ${m[1]} cost ${m[3]}-${m[4]} ≠ source ${src.low}-${src.high}`);
+    }
+    const nreSite = read(join(tools, "nre-simulator/data.ts"));
+    for (const c of nreSite.matchAll(/^ {4}id: "([^"]+)",\s*\n\s*label: "([^"]+)",([\s\S]*?)(?=^ {2}\},?\s*$)/gm)) {
+      const src = nre[c[2]];
+      if (!src) { say(`site: NRE category "${c[2]}" not in nre-estimation-framework.md`); continue; }
+      let hits = 0;
+      for (const o of c[3].matchAll(/label: "([^"]+)",[\s\S]*?low: (\d+),\s*mid: (\d+),\s*high: (\d+)/g)) {
+        const row = src.rows.find((r) => norm(o[1]).startsWith(norm(r.name)));
+        if (!row) continue;
+        hits++; compared++;
+        if (row.low !== +o[2] || row.mid !== +o[3] || row.high !== +o[4])
+          say(`site: NRE ${c[2]} / ${o[1]} ${o[2]}/${o[3]}/${o[4]} ≠ source ${row.low}/${row.mid}/${row.high}`);
+      }
+      if (!hits) say(`site: NRE ${c[2]} matched no source rows (parser out of date?)`);
+      const tl = nreSite.match(new RegExp(`\\b${c[1]}:\\s*\\{\\s*label:\\s*"[^"]*",\\s*weeks:\\s*(\\d+)`))?.[1];
+      compared++;
+      if (+tl !== src.weeks) say(`site: NRE ${c[2]} timeline ${tl} weeks ≠ source ${src.weeks}`);
     }
     const dfm = read(join(tools, "dfm-checklist/data.ts"));
     const siteDfm = (dfm.match(/^\s{8,}id:\s*"/gm) || []).length;
