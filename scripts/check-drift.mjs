@@ -7,7 +7,8 @@
 // Compares: component prices (CSV), DFM item count, certification cost and timeline,
 // supplier red-flag count, and (site only) the EVT/DVT/PVT guide data: per-stage units,
 // weeks, deliverable, goal, assembly and stop line, every check shown (by code), and the
-// timeline note. Exit 1 on any mismatch, with one line per mismatch.
+// timeline note; and every figure in the AI-design guide's "where AI is" table (numbers
+// only, since the site words it differently). Exit 1 on any mismatch, one line per mismatch.
 
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -169,6 +170,20 @@ if (siteArg > -1) {
     const note = sd.match(/TIMELINE_NOTE\s*=\s*"([^"]*)"/)?.[1];
     compared++;
     if (note !== timelineNote) say(`site: TIMELINE_NOTE ≠ source "${timelineNote}"`);
+  }
+
+  // AI-design guide: the site words its table differently, so compare the numbers only.
+  // Every figure in the site's WHERE_AI_IS block must appear in the README's "Where AI is" section.
+  const guidePath = join(site, "src/app/ai-design-to-factory/data.ts");
+  if (existsSync(guidePath)) {
+    const block = read(guidePath).split("WHERE_AI_IS")[1]?.split("export const HANDOFF")[0] ?? "";
+    const where = read(join(ROOT, "ai-design-handoff/README.md")).split(/^## Where AI is/m)[1] ?? "";
+    const figures = new Set(block.match(/\b\d+(?:\.\d+)?%|pass@1 [\d.]+|\b\d+-tooth|\b\d+ (?:tasks|results)/g) ?? []);
+    if (!figures.size) say("site: ai-design-to-factory WHERE_AI_IS has no figures (parser out of date?)");
+    for (const f of figures) {
+      compared++;
+      if (!where.includes(f)) say(`site: ai-design-to-factory figure "${f}" not in README "Where AI is"`);
+    }
   }
 }
 
