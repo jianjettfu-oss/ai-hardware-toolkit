@@ -76,7 +76,7 @@ These guides are also available as interactive web tools:
 
 ## About Breeze
 
-[Breeze](https://breezehw.com) is an AI hardware manufacturing service based in Shenzhen. We help startups go from prototype to production -- engineering, sourcing, manufacturing, and certification under one roof.
+[Breeze](https://breezehw.com) is an AI hardware manufacturing service based in Shenzhen. We help startups go from prototype to production -- engineering, sourcing, manufacturing, and certification, with one team accountable for all of it. Fees, timelines and minimum runs are in the [FAQ](https://breezehw.com/faq).
 
 This toolkit is open-source because we believe better-informed founders build better products. If you want hands-on help with your project, [reach out](https://breezehw.com).
 
@@ -112,4 +112,4 @@ If you cite this toolkit in research, courses, or articles, see [`CITATION.cff`]
 
 - **Interactive web calculators**: [breezehw.com/tools](https://breezehw.com/tools) — BOM Estimator, DFM Checklist, NRE Simulator, Cert Navigator
 - **LLM toolkit** (in [`llm-toolkit/`](./llm-toolkit/)): Claude Code skill, Custom GPT knowledge bundle, and an MCP server, for embedding the toolkit data into AI agents and assistants
-- **Author**: [Jett Fu on LinkedIn](https://www.linkedin.com/in/jett-fu-a287818/) — founder of [AirPop](https://www.airpopstore.com) (respiratory wearables, global distribution); 10+ years consumer hardware in Shenzhen.
+- **Author**: [Jett Fu on LinkedIn](https://www.linkedin.com/in/jett-fu-a287818/) — founder of [AirPop](https://getairpop.com) (respiratory wearables, global distribution); 10+ years consumer hardware in Shenzhen.
