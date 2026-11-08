@@ -170,7 +170,7 @@ This checklist is written for AI hardware -- wearables, edge AI devices, voice r
 | Q1 | Golden sample match | PVT units match DVT golden sample in all specs | Side-by-side comparison |
 | Q2 | Unit-to-unit consistency | Key specs within +/-10% across 20 random units | Power consumption, WiFi RSSI, mic sensitivity |
 | Q3 | Packaging drop test | Retail packaging survives ISTA 2A (or equivalent) | Product inside packaging, not bare product |
-| Q4 | Outgoing QC sampling | AQL 2.5 for critical, AQL 4.0 for major | Define defect classification before production |
+| Q4 | Outgoing QC sampling | AQL 0 for critical, 2.5 for major, 4.0 for minor defects | Common consumer-goods practice ([TÜV Rheinland](https://education.tuv.com/preparing-for-retail-inspection), [QIMA](https://www.qima.com/aql-acceptable-quality-limit)). Define defect classes before production |
 
 ### Firmware & Provisioning
 
@@ -223,4 +223,4 @@ Each stage can run longer if problems are found. Budget 6 months from EVT start 
 2. **Not doing reliability testing during DVT.** Drop tests and temperature cycling reveal design weaknesses that show up as field returns.
 3. **Treating PVT as a design stage.** If you're still making PCB changes during PVT, you're not in PVT -- you're still in DVT. Go back.
 4. **Not testing OTA before shipping.** Your first OTA update to real customers will reveal every edge case you missed. Test with PVT units first.
-5. **Skipping pre-compliance.** A $500-1000 pre-scan catches 80% of EMC issues. Failing formal FCC testing costs $5K+ and 6-8 weeks.
+5. **Skipping pre-compliance.** A pre-scan (P1-P2) finds emissions problems while the PCB can still change. A failure at the formal lab means a fix, then a paid retest and another wait for a lab slot.
