@@ -1,0 +1,15 @@
+{
+  "name": "breeze-hardware",
+  "description": "Hardware manufacturing skills from the Breeze AI Hardware Toolkit: DFM review, certification planning, EVT/DVT/PVT gates, BOM and NRE cost, supplier vetting, AI-made design to factory handoff.",
+  "owner": {
+    "name": "Breeze",
+    "url": "https://breezehw.com"
+  },
+  "plugins": [
+    {
+      "name": "ai-hardware-toolkit",
+      "source": "./plugins/ai-hardware-toolkit",
+      "description": "Six skills for taking an AI hardware product from prototype to production, backed by the open data in this repository."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "ai-hardware-toolkit",
+  "description": "Six skills for taking an AI hardware product from prototype to production: DFM review, certification planning, EVT/DVT/PVT gates, BOM and NRE cost, Shenzhen supplier vetting, AI-made design to factory handoff.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Breeze",
+    "url": "https://breezehw.com"
+  },
+  "homepage": "https://github.com/jianjettfu-oss/ai-hardware-toolkit",
+  "license": "MIT"
+}

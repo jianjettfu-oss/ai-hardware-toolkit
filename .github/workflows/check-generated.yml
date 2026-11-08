@@ -1,0 +1,18 @@
+name: Generated files are up to date
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Skills, Cursor rules and GPT knowledge match the topic files
+        run: node scripts/build-llm.mjs --check
+      - name: MCP server data matches the topic files
+        run: node scripts/check-drift.mjs

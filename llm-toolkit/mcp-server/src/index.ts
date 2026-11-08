@@ -265,8 +265,8 @@ const CERTIFICATIONS: Record<string, { fullName: string; region: string; timelin
   CCC: {
     fullName: "China Compulsory Certificate (中国强制性产品认证)",
     region: "China",
-    timeline: "8-14 weeks",
-    costLow: 4000, costMid: 8000, costHigh: 18000,
+    timeline: "8-16 weeks",
+    costLow: 5000, costMid: 10000, costHigh: 20000,
     required: true,
     keyRequirements: [
       "Required for many product categories sold in mainland China — applicability depends on HS code (battery, charger, AC adapter most common for AI hardware)",

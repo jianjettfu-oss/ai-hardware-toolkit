@@ -60,6 +60,46 @@ Checklist for files drawn with AI tools (CAD, schematic, layout, firmware): thre
 
 ---
 
+## Use it with AI agents
+
+Six skills built on this data, for Claude Code, Cursor and other agents that read the [Agent Skills](https://agentskills.io) format:
+
+| Skill | What it does |
+|---|---|
+| `hardware-dfm-review` | Reviews CAD, schematic, layout and BOM against the 29-item DFM checklist |
+| `hardware-certification-plan` | Maps target markets to certifications, with cost, timeline and sequence |
+| `hardware-validation-gates` | Plans EVT / DVT / PVT builds and runs gate reviews |
+| `hardware-cost-estimate` | BOM per unit and NRE, from the Shenzhen pricing data |
+| `shenzhen-supplier-vetting` | Checks a manufacturer against 28 red flags and the scorecard |
+| `ai-design-factory-handoff` | Checks AI-drawn hardware files before they go to a factory |
+
+**Claude Code** (one step, Claude Code 2.1.275 or later):
+
+```
+/plugin install ai-hardware-toolkit --marketplace jianjettfu-oss/ai-hardware-toolkit
+```
+
+Or in two steps:
+
+```
+/plugin marketplace add jianjettfu-oss/ai-hardware-toolkit
+/plugin install ai-hardware-toolkit@breeze-hardware
+```
+
+**Single skills, any agent**: copy a folder from [`plugins/ai-hardware-toolkit/skills/`](./plugins/ai-hardware-toolkit/skills/) into `~/.claude/skills/` (all projects) or `.claude/skills/` (one project).
+
+**Cursor**: copy the files you want from [`cursor-rules/`](./cursor-rules/) into your project's `.cursor/rules/`.
+
+**ChatGPT (Custom GPT)**: upload [`llm-toolkit/custom-gpt/knowledge.md`](./llm-toolkit/custom-gpt/knowledge.md) as knowledge and use [`instructions.md`](./llm-toolkit/custom-gpt/instructions.md) as the instructions.
+
+**MCP server**: see [`llm-toolkit/mcp-server/`](./llm-toolkit/mcp-server/).
+
+### One source
+
+The topic folders above are the only place the data is edited. `node scripts/build-llm.mjs` regenerates the skill references, Cursor rules and the GPT knowledge file from them; `node scripts/check-drift.mjs` checks the MCP server's built-in data against them. CI runs both on every push.
+
+---
+
 ## Interactive Versions
 
 These guides are also available as interactive web tools:
@@ -95,7 +135,8 @@ Found an error? Have pricing data from a recent production run? Know a certifica
 
 1. Fork this repo
 2. Make your changes
-3. Submit a pull request with context (what changed and why)
+3. If you changed a topic file, run `node scripts/build-llm.mjs` and commit the regenerated files
+4. Submit a pull request with context (what changed and why)
 
 We especially welcome:
 - Updated component pricing (include date and volume)
@@ -118,5 +159,5 @@ If you cite this toolkit in research, courses, or articles, see [`CITATION.cff`]
 ## Companion tools
 
 - **Interactive web calculators**: [breezehw.com/tools](https://breezehw.com/tools) — BOM Estimator, DFM Checklist, NRE Simulator, Cert Navigator
-- **LLM toolkit** (in [`llm-toolkit/`](./llm-toolkit/)): Claude Code skill, Custom GPT knowledge bundle, and an MCP server, for embedding the toolkit data into AI agents and assistants
+- **AI agents**: six skills, Cursor rules, a Custom GPT knowledge file and an MCP server. See [Use it with AI agents](#use-it-with-ai-agents)
 - **Author**: [Jett Fu on LinkedIn](https://www.linkedin.com/in/jett-fu-a287818/) — founder of [AirPop](https://getairpop.com) (respiratory wearables, global distribution); 10+ years consumer hardware in Shenzhen.
