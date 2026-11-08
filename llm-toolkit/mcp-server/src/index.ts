@@ -15,10 +15,10 @@ const COMPONENT_PRICING: Record<string, { description: string; low: number; mid:
     { description: "MediaTek Genio 510/700 — 4-10 TOPS NPU, industrial grade.", low: 18.00, mid: 28.00, high: 40.00, notes: "Long-term availability commitment from MTK" },
   ],
   "Memory": [
-    { description: "512MB + 4GB eMMC — Basic: voice recorder, simple sensor.", low: 2.70, mid: 4.00, high: 5.50, notes: "Pairs with RV1103" },
-    { description: "1GB + 8GB eMMC — Standard: camera device, AI inference.", low: 4.20, mid: 6.50, high: 9.00, notes: "Most common for AI wearables" },
-    { description: "2GB + 32GB eMMC — High: smart display, local LLM.", low: 8.00, mid: 11.50, high: 16.00, notes: "Required for on-device LLM" },
-    { description: "8MB PSRAM + 4MB Flash — MCU-tier for ESP32-S3.", low: 0.85, mid: 1.40, high: 2.20, notes: "Built into ESP32-S3 module pricing" },
+    { description: "512MB + 4GB eMMC — Basic: voice recorder, simple sensor.", low: 19.00, mid: 25.00, high: 36.00, notes: "Read 2026-11-08, low confidence: DDR3/DDR3L 4Gb 7.70-18.70 + 4GB eMMC 11.50-17.00. RV1103/RV1106 carry RAM in the package. Get quotes" },
+    { description: "1GB + 8GB eMMC — Standard: camera device, AI inference.", low: 31.00, mid: 42.50, high: 65.00, notes: "Read 2026-11-08, low confidence: 1GB LPDDR4 21-35 or DDR4 27.50-46 + 8GB eMMC 9.90-19. DRAM often on allocation. Get quotes" },
+    { description: "2GB + 32GB eMMC — High: smart display, local LLM.", low: 57.00, mid: 80.00, high: 108.00, notes: "Estimate 2026-11-08, no 1,000-pc price found: 2GB DRAM 42-70 + 32GB eMMC 15-37.50. Get quotes" },
+    { description: "8MB PSRAM + 4MB Flash — MCU-tier for ESP32-S3.", low: 3.10, mid: 3.50, high: 4.60, notes: "Read 2026-11-08, in stock: 64Mb PSRAM 2.69-3.58 + 32Mb NOR 0.45-0.98. Often inside ESP32-S3 module pricing" },
   ],
   "Display": [
     { description: "No display — Audio-only device.", low: 0, mid: 0, high: 0, notes: "Simplest BOM — recommended for v1" },

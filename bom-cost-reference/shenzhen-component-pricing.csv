@@ -4,10 +4,10 @@ Processor / SoC,Rockchip RV1103,"Camera + AI, 0.5 TOPS NPU. Plaud NotePin tier."
 Processor / SoC,Rockchip RK3562,"Mid-range AI, 1 TOPS NPU, Mali G52 GPU.",7.89,10.00,13.00,Handles most on-device inference workloads
 Processor / SoC,Rockchip RK3588S,"High-end, 6 TOPS NPU, octa-core. For edge servers.",25.00,35.00,50.00,Overkill for wearables -- use for edge AI boxes
 Processor / SoC,MediaTek Genio 510/700,"4-10 TOPS NPU, industrial grade.",18.00,28.00,40.00,Long-term availability commitment from MTK
-Memory,512MB + 4GB eMMC,"Basic: voice recorder, simple sensor device.",2.70,4.00,5.50,Pairs with RV1103
-Memory,1GB + 8GB eMMC,"Standard: camera device, on-device AI inference.",4.20,6.50,9.00,Most common for AI wearables
-Memory,2GB + 32GB eMMC,"High: smart display, local LLM, multi-model AI.",8.00,11.50,16.00,Required for on-device LLM
-Memory,8MB PSRAM + 4MB Flash,"MCU-tier: ESP32-S3 builds, no discrete RAM.",0.85,1.40,2.20,Built into ESP32-S3 module pricing
+Memory,512MB + 4GB eMMC,"Basic: voice recorder, simple sensor device.",19.00,25.00,36.00,"Read 2026-11-08 at ~1k, low confidence: DDR3/DDR3L 4Gb 7.70-18.70 + 4GB eMMC 11.50-17.00. RV1103/RV1106 carry their RAM in the package and need only storage. Get quotes"
+Memory,1GB + 8GB eMMC,"Standard: camera device, on-device AI inference.",31.00,42.50,65.00,"Read 2026-11-08 at ~1k, low confidence: 1GB LPDDR4 21-35 or DDR4 27.50-46 + 8GB eMMC 9.90-19. DRAM is often on allocation. Get quotes"
+Memory,2GB + 32GB eMMC,"High: smart display, local LLM, multi-model AI.",57.00,80.00,108.00,"Estimate 2026-11-08, no 1,000-pc price found: 2GB DRAM 42-70 (1GB range x2; 16Gb parts list near 54.50 at 10-30 pcs) + 32GB eMMC 15-37.50. Get quotes"
+Memory,8MB PSRAM + 4MB Flash,"MCU-tier: ESP32-S3 builds, no discrete RAM.",3.10,3.50,4.60,"Read 2026-11-08 at ~1k, in stock: APS6404L 64Mb PSRAM 2.69-3.58 + 32Mb NOR 0.45-0.98. Often already inside ESP32-S3 module pricing"
 Display,No display,Audio-only device (like Plaud NotePin).,0.00,0.00,0.00,Simplest BOM -- recommended for v1
 Display,0.96in OLED (mono),"Simple status display, 128x64.",0.80,1.20,1.80,SSD1306 driver -- well-supported
 Display,1.54in AMOLED (color),"Smartwatch-tier, 240x240.",3.00,5.00,8.00,Significant power draw -- plan battery accordingly

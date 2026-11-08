@@ -2,6 +2,8 @@
 
 Real component pricing from Shenzhen suppliers at **1,000-unit volume** (2025-2026 data).
 
+> **Memory rows re-read 2026-11-08.** Legacy DRAM and eMMC now cost many times what they did in early 2025. The press, quoting DRAMeXchange, put the DDR4 8Gb contract price at about $1.35 in March 2025 and about $27.50 in October 2026. In a small device, memory is now often the biggest line in the BOM. The memory notes in the CSV show how each range was built and how sure we are (mostly low confidence; the 2GB + 32GB row is an estimate). Get quotes before you commit to a price, and prefer a SoC or module with memory in the package where the product allows it.
+
 ## What's Inside
 
 **[shenzhen-component-pricing.csv](./shenzhen-component-pricing.csv)** -- A reference BOM with low/mid/high pricing for every major component category in a typical AI hardware device:
